@@ -1,0 +1,146 @@
+import time
+
+import vk_api
+import random
+from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
+from Idk_SanyaBot import tok
+
+botinfo = 'список команд:\nролл - зароллить\nор - орёл и решка\nкто я - рандом оскорбление\nхуесосы - тегнуть всех\nсаня (в контексте) - сами знаете\nкамень\ножницы\бумага - игра с ботом\nрулетка - русская рулетка'
+
+osk_list = ['пиздюк', 'хуеглот', 'гей', 'блядина', 'пидор', 'пубертатная язва', 'хуесос', 'пидорасище', 'с хуём в жопе', 'членопоглощатель', 'зоофил-девственник', 'нищенка обьебанная', 'лс ебанный', 'с маленьким пиструнчиком', 'скорострел', 'любитель гей порно', 'спермоглот', 'милф хантер', 'охотник на хохлов', 'наркоман', 'негр',]
+good_list = ['красивый', 'крутой', 'сексапильный', 'обаятельный', 'лучший', 'умный', 'с большой писькой', 'мудрый', 'морально подкован',]
+rulet_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+timme_colvo = random.randint(0,8)
+def nozhn():
+    on = '+'
+    while on == '+':
+        game_list = ['Камень', 'Ножницы', 'Бумага']
+        my_choise = random.choice(game_list)
+        player_choise = "Ножницы"
+        if player_choise == my_choise:
+            sender(id, 'камень, ножницы, бумага')
+            sender(id, 'Ничья')
+        elif player_choise == 'Ножницы':
+            if my_choise == "Камень":
+                sender(id, 'камень, ножницы, бумага')
+
+                sender(id, 'Камень сломал ножницы, ты проиграл')
+            else:
+                sender(id, 'камень, ножницы, бумага')
+
+                sender(id, 'Ножницы разрезали бумагу, ты выиграл')
+        on = '-'
+def kamen():
+    on = '+'
+    while on == '+':
+        game_list = ['Камень', 'Ножницы', 'Бумага']
+        my_choise = random.choice(game_list)
+        player_choise = "Камень"
+        if player_choise == my_choise:
+            sender(id, 'камень, ножницы, бумага')
+            sender(id, 'Ничья')
+        elif player_choise == 'Камень':
+            if my_choise == "Ножницы":
+                sender(id, 'камень, ножницы, бумага')
+
+                sender(id, 'Камень сломал ножницы, ты выиграл')
+            else:
+                sender(id, 'камень, ножницы, бумага')
+
+                sender(id, 'бумага обвернула камень, ты проиграл')
+        on = '-'
+def bumaga():
+    on = '+'
+    while on == '+':
+        game_list = ['Камень', 'Ножницы', 'Бумага']
+        my_choise = random.choice(game_list)
+        player_choise = "Бумага"
+        if player_choise == my_choise:
+            sender(id, 'камень, ножницы, бумага')
+            sender(id, 'Ничья')
+        elif player_choise == 'Бумага':
+            if my_choise == "Ножницы":
+                sender(id, 'камень, ножницы, бумага')
+
+                sender(id, 'ножницы порезали бумагу, ты проиграл')
+            else:
+                sender(id, 'камень, ножницы, бумага')
+
+                sender(id, 'бумага обвернула камень, ты выиграл')
+        on = '-'
+def ruletka():
+
+    sender(id, 'Кручу барабан...')
+    time.sleep(random.randint(2,8))
+    sender(id, "Стреляю!")
+    dead = random.choice(rulet_list)
+    result = random.choice(rulet_list)
+    if dead == result:
+        sender(id, 'ТЫ ПРОИГРАЛ ХАХАХАХА')
+
+    else:
+        sender(id, 'выпало: ' + str(result) + ' пуля была в: ' + str(dead))
+
+vk_session = vk_api.VkApi(token=tok)
+longpoll = VkBotLongPoll(vk_session, 215328856)
+
+def orel_reshka():
+    result = random.randint(0, 1)
+    if result == 0:
+        sender(id, 'тебе выпала решка')
+    else:
+        sender(id, "тебе выпал орёл")
+
+def sender(id, text):
+    vk_session.method('messages.send', {'chat_id' : id, 'message' : text, 'random_id' : 0})
+
+
+for event in longpoll.listen():
+    if event.type == VkBotEventType.MESSAGE_NEW:
+        if event.from_chat:
+
+            id = event.chat_id
+            msg = event.object.message['text'].lower()
+
+            if "саня" in msg:
+                osk = random.choice(osk_list)
+                sender(id, 'саня ' + osk)
+            if msg == 'ролл':
+                roll_action = random.randint(0, 100)
+                sender(id, 'тебе выпало ' + str(roll_action))
+            if msg == 'ор':
+                orel_reshka()
+            if "хуесосы" in msg:
+                sender(id, "@all вставайте хуесосики")
+            if msg == 'кто я':
+                osk = random.choice(osk_list)
+                sender(id, 'ты ' + osk)
+            if msg == "инфо":
+                sender(id, botinfo)
+            if msg == "ножницы":
+                nozhn()
+                pass
+            if msg == 'камень':
+                kamen()
+                pass
+            if msg == 'бумага':
+                bumaga()
+                pass
+            if "прохор" in msg:
+                good = random.choice(good_list)
+                sender(id, 'о да, Прохор ' + good)
+            if msg == "рулетка":
+                    ruletka()
+
+
+
+
+# выключенный проспам
+            # if msg == 'test':
+            #     colvo = 0
+            #     while colvo != 10:
+            #         sender(id, "саня гей")
+            #         colvo += 1
+
+
+
