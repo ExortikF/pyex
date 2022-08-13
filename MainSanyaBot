@@ -82,7 +82,7 @@ def ruletka():
         sender(id, 'выпало: ' + str(result) + ' пуля была в: ' + str(dead))
 
 vk_session = vk_api.VkApi(token=tok)
-longpoll = VkBotLongPoll(vk_session, 215328856)
+longpoll = VkBotLongPoll(vk_session, #vk_group_id_here )
 
 def orel_reshka():
     result = random.randint(0, 1)
